@@ -2,10 +2,18 @@ package pt.pedrocorreia.android_calculator
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.widget.Button
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO
+import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES
 import pt.pedrocorreia.android_calculator.databinding.ActivityMainBinding
 import java.text.NumberFormat
+import kotlin.math.roundToInt
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
 
@@ -16,12 +24,49 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private var operation : String? = null
     private var text : String? = null
     private var numberButton : Boolean = true
+    private var lightMode : Boolean = true
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val inflater : MenuInflater = menuInflater
+        inflater.inflate(R.menu.menu_button, menu)
+        return true
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean("lightMode", lightMode)
+        Log.d("NightMode", "guardei $lightMode")
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        lightMode = savedInstanceState.getBoolean("lightMode")
+        Log.d("NightMode", "restaurei $lightMode")
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val id : Int = item.itemId
+        if(id == R.id.light_mode){
+            Log.d("NightMode", "antes $lightMode")
+            if(lightMode) {
+                lightMode = false
+                AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES)
+            }else{
+                lightMode = true
+                AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO)
+            }
+            Log.d("NightMode", "depois $lightMode")
+        }
+        return super.onOptionsItemSelected(item)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+
+        //AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO)
 
         binding.btnOne.setOnClickListener(this)
         binding.btnTwo.setOnClickListener(this)
@@ -45,6 +90,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         binding.btnMultiply.setOnClickListener(procOperation)
         binding.btnDivide.setOnClickListener(procOperation)
         binding.btnPercent.setOnClickListener(procOperation)
+        binding.btnRound.setOnClickListener(procOperation)
+        binding.btnPercent.setOnClickListener(procOperation)
         binding.btnEqual.setOnClickListener(procEqual)
     }
 
@@ -61,12 +108,14 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     private val procOperation = View.OnClickListener {
         operation = (it as Button).text.toString()
-        firstOperator = binding.txtCalc.text.toString().toFloat()
+        firstOperator = NumberFormat.getInstance().parse(binding.txtCalc.text.toString())
+            .toFloat()
         numberButton = false
     }
 
     private val procEqual = View.OnClickListener {
-        secondOperator = binding.txtCalc.text.toString().toFloat()
+        secondOperator = NumberFormat.getInstance().parse(binding.txtCalc.text.toString())
+            .toFloat()
         numberButton = false
         calculate()
     }
@@ -82,6 +131,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             "-" -> result = firstOperator?.minus(secondOperator!!)
             "*" -> result = firstOperator?.times(secondOperator!!)
             "/" -> result = firstOperator?.div(secondOperator!!)
+            "+/-" -> {
+                result = firstOperator?.roundToInt()?.toFloat()
+            }
         }
 
         setCalcText(NumberFormat.getInstance().format(result!!).toString())
