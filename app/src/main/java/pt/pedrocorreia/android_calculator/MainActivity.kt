@@ -10,6 +10,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     private lateinit var binding: ActivityMainBinding
 
+    var firstOperator : Int? = null
+    var secondOperator: Int? = null
+    var operation : String? = null
+    var text : String? = null
+    var numberButton : Boolean = true
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -26,13 +32,33 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         binding.btnEight.setOnClickListener(this)
         binding.btnNine.setOnClickListener(this)
         binding.btnZero.setOnClickListener(this)
+        binding.btnDot.setOnClickListener(this)
         binding.btnClear.setOnClickListener {
             binding.txtCalc.text = ""
+            firstOperator = null
+            secondOperator = null
+            operation = null
         }
+        binding.btnPlus.setOnClickListener(procOperation)
     }
 
     override fun onClick(view: View?) {
-        var text : String = binding.txtCalc.text.toString()
-        binding.txtCalc.text = text.plus((view as Button).text)
+        if(numberButton) {
+            text = binding.txtCalc.text.toString()
+            setCalcText(text.plus((view as Button).text))
+        } else {
+            setCalcText((view as Button).text.toString())
+            numberButton = true
+        }
+
+    }
+
+    private val procOperation = View.OnClickListener {
+        operation = (it as Button).text.toString()
+        numberButton = false
+    }
+
+    private fun setCalcText(txt: String){
+        binding.txtCalc.text = txt
     }
 }
