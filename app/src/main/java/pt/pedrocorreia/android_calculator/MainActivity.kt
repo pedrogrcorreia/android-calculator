@@ -5,16 +5,17 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import pt.pedrocorreia.android_calculator.databinding.ActivityMainBinding
+import java.text.NumberFormat
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     private lateinit var binding: ActivityMainBinding
 
-    var firstOperator : Int? = null
-    var secondOperator: Int? = null
-    var operation : String? = null
-    var text : String? = null
-    var numberButton : Boolean = true
+    private var firstOperator : Float? = null
+    private var secondOperator: Float? = null
+    private var operation : String? = null
+    private var text : String? = null
+    private var numberButton : Boolean = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,6 +41,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             operation = null
         }
         binding.btnPlus.setOnClickListener(procOperation)
+        binding.btnMinus.setOnClickListener(procOperation)
+        binding.btnMultiply.setOnClickListener(procOperation)
+        binding.btnDivide.setOnClickListener(procOperation)
+        binding.btnPercent.setOnClickListener(procOperation)
+        binding.btnEqual.setOnClickListener(procEqual)
     }
 
     override fun onClick(view: View?) {
@@ -55,10 +61,29 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     private val procOperation = View.OnClickListener {
         operation = (it as Button).text.toString()
+        firstOperator = binding.txtCalc.text.toString().toFloat()
         numberButton = false
+    }
+
+    private val procEqual = View.OnClickListener {
+        secondOperator = binding.txtCalc.text.toString().toFloat()
+        numberButton = false
+        calculate()
     }
 
     private fun setCalcText(txt: String){
         binding.txtCalc.text = txt
+    }
+
+    private fun calculate(){
+        var result : Float? = null
+        when(operation){
+            "+" -> result = firstOperator?.plus(secondOperator!!)
+            "-" -> result = firstOperator?.minus(secondOperator!!)
+            "*" -> result = firstOperator?.times(secondOperator!!)
+            "/" -> result = firstOperator?.div(secondOperator!!)
+        }
+
+        setCalcText(NumberFormat.getInstance().format(result!!).toString())
     }
 }
