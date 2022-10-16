@@ -18,6 +18,6 @@
     <string name="dot">.</string>
     <string name="clear">AC</string>
     <string name="percent">%</string>
-    <string name="round">+/-</string>
+    <string name="invert">+/-</string>
     <string name="light">Light/Dark Mode</string>
 </resources>

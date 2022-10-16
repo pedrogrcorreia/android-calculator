@@ -90,8 +90,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         binding.btnMultiply.setOnClickListener(procOperation)
         binding.btnDivide.setOnClickListener(procOperation)
         binding.btnPercent.setOnClickListener(procOperation)
-        binding.btnRound.setOnClickListener(procOperation)
-        binding.btnPercent.setOnClickListener(procOperation)
+        binding.btnInvert.setOnClickListener(procInvert)
+        binding.btnPercent.setOnClickListener(procPercent)
         binding.btnEqual.setOnClickListener(procEqual)
     }
 
@@ -108,16 +108,39 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     private val procOperation = View.OnClickListener {
         operation = (it as Button).text.toString()
-        firstOperator = NumberFormat.getInstance().parse(binding.txtCalc.text.toString())
+        firstOperator = NumberFormat.getInstance().parse(binding.txtCalc.text!!.toString())
             .toFloat()
         numberButton = false
     }
 
     private val procEqual = View.OnClickListener {
-        secondOperator = NumberFormat.getInstance().parse(binding.txtCalc.text.toString())
-            .toFloat()
-        numberButton = false
-        calculate()
+        if(binding.txtCalc.text.toString().isNotEmpty()) {
+            if(numberButton) {
+                secondOperator = NumberFormat.getInstance().parse(binding.txtCalc.text.toString())
+                    .toFloat()
+                numberButton = false
+                calculate()
+                firstOperator = secondOperator
+            }else {
+                secondOperator = NumberFormat.getInstance().parse(binding.txtCalc.text.toString())
+                    .toFloat()
+                numberButton = false
+                calculate()
+            }
+
+        }
+    }
+
+    private val procInvert = View.OnClickListener {
+        text = binding.txtCalc.text.toString()
+        val number = NumberFormat.getInstance().parse(text).toFloat()
+        setCalcText(NumberFormat.getInstance().format(-1 * number).toString())
+    }
+
+    private val procPercent = View.OnClickListener {
+        text = binding.txtCalc.text.toString()
+        val number = NumberFormat.getInstance().parse(text).toFloat()
+        setCalcText(NumberFormat.getInstance().format(0.01 * number).toString())
     }
 
     private fun setCalcText(txt: String){
