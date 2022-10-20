@@ -66,36 +66,36 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         val view = binding.root
         setContentView(view)
 
-        binding.btnOne.setOnClickListener(this)
-        binding.btnTwo.setOnClickListener(this)
-        binding.btnThree.setOnClickListener(this)
-        binding.btnFour.setOnClickListener(this)
-        binding.btnFive.setOnClickListener(this)
-        binding.btnSix.setOnClickListener(this)
-        binding.btnSeven.setOnClickListener(this)
-        binding.btnEight.setOnClickListener(this)
-        binding.btnNine.setOnClickListener(this)
-        binding.btnZero.setOnClickListener(this)
-        binding.btnDot.setOnClickListener(this)
-        binding.btnClear.setOnClickListener {
-            binding.txtCalc.text = ""
+        binding.btnOne?.setOnClickListener(this)
+        binding.btnTwo?.setOnClickListener(this)
+        binding.btnThree?.setOnClickListener(this)
+        binding.btnFour?.setOnClickListener(this)
+        binding.btnFive?.setOnClickListener(this)
+        binding.btnSix?.setOnClickListener(this)
+        binding.btnSeven?.setOnClickListener(this)
+        binding.btnEight?.setOnClickListener(this)
+        binding.btnNine?.setOnClickListener(this)
+        binding.btnZero?.setOnClickListener(this)
+        binding.btnDot?.setOnClickListener(this)
+        binding.btnClear?.setOnClickListener {
+            binding.txtCalc?.text = ""
             firstOperator = null
             secondOperator = null
             operation = null
         }
-        binding.btnPlus.setOnClickListener(procOperation)
-        binding.btnMinus.setOnClickListener(procOperation)
-        binding.btnMultiply.setOnClickListener(procOperation)
-        binding.btnDivide.setOnClickListener(procOperation)
-        binding.btnPercent.setOnClickListener(procOperation)
-        binding.btnInvert.setOnClickListener(procInvert)
-        binding.btnPercent.setOnClickListener(procPercent)
-        binding.btnEqual.setOnClickListener(procEqual)
+        binding.btnPlus?.setOnClickListener(procOperation)
+        binding.btnMinus?.setOnClickListener(procOperation)
+        binding.btnMultiply?.setOnClickListener(procOperation)
+        binding.btnDivide?.setOnClickListener(procOperation)
+        binding.btnPercent?.setOnClickListener(procOperation)
+        binding.btnInvert?.setOnClickListener(procInvert)
+        binding.btnPercent?.setOnClickListener(procPercent)
+        binding.btnEqual?.setOnClickListener(procEqual)
     }
 
     override fun onClick(view: View?) {
         if(numberButton) {
-            text = binding.txtCalc.text.toString()
+            text = binding.txtCalc?.text.toString()
             setCalcText(text.plus((view as Button).text))
         } else {
             setCalcText((view as Button).text.toString())
@@ -106,21 +106,21 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     private val procOperation = View.OnClickListener {
         operation = (it as Button).text.toString()
-        firstOperator = NumberFormat.getInstance().parse(binding.txtCalc.text!!.toString())!!
+        firstOperator = NumberFormat.getInstance().parse(binding.txtCalc?.text!!.toString())!!
             .toFloat()
         numberButton = false
     }
 
     private val procEqual = View.OnClickListener {
-        if(binding.txtCalc.text.toString().isNotEmpty()) {
+        if(binding.txtCalc?.text.toString().isNotEmpty()) {
             if(numberButton) {
-                secondOperator = NumberFormat.getInstance().parse(binding.txtCalc.text.toString())!!
+                secondOperator = NumberFormat.getInstance().parse(binding.txtCalc?.text.toString())!!
                     .toFloat()
                 numberButton = false
                 calculate()
                 firstOperator = secondOperator
             }else {
-                secondOperator = NumberFormat.getInstance().parse(binding.txtCalc.text.toString())!!
+                secondOperator = NumberFormat.getInstance().parse(binding.txtCalc?.text.toString())!!
                     .toFloat()
                 numberButton = false
                 calculate()
@@ -130,23 +130,23 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private val procInvert = View.OnClickListener {
-        if(binding.txtCalc.text.toString().isNotEmpty()) {
-            text = binding.txtCalc.text.toString()
+        if(binding.txtCalc?.text.toString().isNotEmpty()) {
+            text = binding.txtCalc?.text.toString()
             val number: Float = NumberFormat.getInstance().parse(text!!)!!.toFloat()
             setCalcText(NumberFormat.getInstance().format(-1 * number).toString())
         }
     }
 
     private val procPercent = View.OnClickListener {
-        if(binding.txtCalc.text.toString().isNotEmpty()) {
-            text = binding.txtCalc.text.toString()
+        if(binding.txtCalc?.text.toString().isNotEmpty()) {
+            text = binding.txtCalc?.text.toString()
             val number: Float = NumberFormat.getInstance().parse(text!!)!!.toFloat()
             setCalcText(NumberFormat.getInstance().format(0.01 * number).toString())
         }
     }
 
     private fun setCalcText(txt: String){
-        binding.txtCalc.text = txt
+        binding.txtCalc?.text = txt
     }
 
     private fun calculate(){
