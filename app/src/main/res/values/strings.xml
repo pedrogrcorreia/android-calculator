@@ -32,7 +32,7 @@
     <string name="sqrt"><sup>2&#8730;</sup>x</string>
     <string name="cbrt"><sup>3&#8730;</sup>x</string>
     <string name="xrt"><sup>x&#8730;</sup>y</string>
-    <string name="fraction"><sup>1</sup>/<sub>x</sub></string>
+    <string name="fraction"><sup>1</sup>/x</string>
     <string name="factorial">x!</string>
     <string name="random">Rand</string>
 
